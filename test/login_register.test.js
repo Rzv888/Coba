@@ -2,25 +2,31 @@ const { JSDOM } = require("jsdom");
 const fs = require("fs");
 const path = require("path");
 const { screen, fireEvent } = require("@testing-library/dom");
+const jQuery = require("jquery")(require("jsdom").jsdom().defaultView);
+global.$ = jQuery; // Menyediakan $ ke global scope
+
 
 describe("Login and Register DOM Manipulation Tests", () => {
   let document, container;
 
   beforeEach(() => {
-    const filePath = path.resolve(__dirname, "../views/Login_Register/login_register.ejs");
-    console.log("Reading HTML from:", filePath); // Debugging line
-    const html = fs.readFileSync(filePath, "utf8");
+    // Load HTML dan JavaScript ke dalam DOM menggunakan JSDOM
+    const html = fs.readFileSync(path.resolve(__dirname, "../views/Login_Register/login_register.ejs"), "utf8");
     const dom = new JSDOM(html, { runScripts: "dangerously" });
     document = dom.window.document;
     container = document.getElementById("container");
-
+  
+    // Import jQuery dan simpan ke global
+    const jQuery = require("jquery")(dom.window);
+    global.$ = jQuery;
+  
+    // Mocking DOM Elements
     global.document = document;
     global.window = dom.window;
-    
-    // Pastikan path ke login_register.js benar
-    require("../public/js/login_register.js"); // Sesuaikan dengan path yang benar
-    // Sesuaikan dengan path yang benar
+  
+    require("../public/js/login_register.js"); // Load the JS file setelah menyiapkan DOM
   });
+  
 
   afterEach(() => {
     jest.resetModules(); // Reset modules after each test
