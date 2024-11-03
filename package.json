@@ -34,6 +34,7 @@
     "tugasbesarwebprogramming": "file:"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "prisma": "^5.7.0"
   }
 }
