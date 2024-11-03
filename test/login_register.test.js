@@ -7,18 +7,24 @@ describe("Login and Register DOM Manipulation Tests", () => {
   let document, container;
 
   beforeEach(() => {
-    // Load HTML dan JavaScript ke dalam DOM menggunakan JSDOM
-    const html = fs.readFileSync(path.resolve(__dirname, "index.html"), "utf8");
+    const filePath = path.resolve(__dirname, "../views/Login_Register/login_register.ejs");
+    console.log("Reading HTML from:", filePath); // Debugging line
+    const html = fs.readFileSync(filePath, "utf8");
     const dom = new JSDOM(html, { runScripts: "dangerously" });
     document = dom.window.document;
     container = document.getElementById("container");
 
-    // Mocking DOM Elements
     global.document = document;
     global.window = dom.window;
-    require("./login_register.js"); // Load the JS file after setting up DOM
+    
+    // Pastikan path ke login_register.js benar
+    require("../public/js/login_register.js"); // Sesuaikan dengan path yang benar
+    // Sesuaikan dengan path yang benar
   });
 
+  afterEach(() => {
+    jest.resetModules(); // Reset modules after each test
+  });
   afterEach(() => {
     jest.resetModules(); // Reset modules after each test
   });
